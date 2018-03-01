@@ -6,7 +6,6 @@
 
 #define STATUS_DISCONNECTED "disconnected"
 #define STATUS_ONLINE "online"
-#define SENSOR_NAME "basement"
 #define WIFI_SSID "<wifi-name>"
 #define WIFI_PASS "<wifi-password>"
 #define MQTT_IP "192.168.0.107"
@@ -17,8 +16,7 @@ ADC_MODE(ADC_VCC);
 unsigned long previousMillis = 0;
 const long interval = 10 * 60 * 1000;
 
-const String chipId = String(ESP.getChipId());
-const String baseTopic = SENSOR_NAME;
+const String baseTopic = "basementsensor";
 const String tempTopic = baseTopic + "/" + "temperature";
 const String humiTopic = baseTopic + "/" + "humidity";
 const String presTopic = baseTopic + "/" + "pressure";
