@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="2.54" unitdist="mm" unit="mm" style="dots" multiple="1" display="no" altdistance="1" altunitdist="mm" altunit="mm"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
@@ -4946,9 +4946,7 @@ type 0309, grid 2.5 mm</description>
 <part name="FRAME1" library="SparkFun-Aesthetics" library_urn="urn:adsk.eagle:library:507" deviceset="FRAME-LETTER" device="NO_PACKAGE" package3d_urn="urn:adsk.eagle:package:37104/1"/>
 <part name="JP1" library="adafruit" library_urn="urn:adsk.eagle:library:420" deviceset="PINHD-1X6" device="CB"/>
 <part name="J1" library="SparkFun-Connectors" library_urn="urn:adsk.eagle:library:513" deviceset="USB_MICRO-B" device="_HALF_PTH" package3d_urn="urn:adsk.eagle:package:38241/1" value="AMP FCI 10103594-0001LF"/>
-<part name="H1" library="SparkFun-Hardware" deviceset="STAND-OFF" device=""/>
 <part name="H2" library="SparkFun-Hardware" deviceset="STAND-OFF" device=""/>
-<part name="H3" library="SparkFun-Hardware" deviceset="STAND-OFF" device=""/>
 <part name="H4" library="SparkFun-Hardware" deviceset="STAND-OFF" device=""/>
 <part name="S1" library="SparkFun-Switches" deviceset="MOMENTARY-SWITCH-SPST" device="-PTH-6.0MM"/>
 <part name="S2" library="SparkFun-Switches" deviceset="MOMENTARY-SWITCH-SPST" device="-PTH-6.0MM"/>
@@ -4978,9 +4976,7 @@ type 0309, grid 2.5 mm</description>
 <instance part="FRAME1" gate="V" x="147.32" y="0"/>
 <instance part="JP1" gate="A" x="86.36" y="172.72" rot="R180"/>
 <instance part="J1" gate="G$1" x="43.18" y="170.18"/>
-<instance part="H1" gate="G$1" x="137.16" y="10.16"/>
 <instance part="H2" gate="G$1" x="137.16" y="5.08"/>
-<instance part="H3" gate="G$1" x="142.24" y="10.16"/>
 <instance part="H4" gate="G$1" x="142.24" y="5.08"/>
 <instance part="S1" gate="G$1" x="43.18" y="119.38"/>
 <instance part="S2" gate="G$1" x="43.18" y="91.44"/>
@@ -5278,7 +5274,7 @@ type 0309, grid 2.5 mm</description>
 <label x="25.4" y="175.26" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$4" class="0">
+<net name="VCCIO" class="0">
 <segment>
 <pinref part="U2" gate="G$1" pin="3V3OUT"/>
 <pinref part="U2" gate="G$1" pin="VCCIO"/>
