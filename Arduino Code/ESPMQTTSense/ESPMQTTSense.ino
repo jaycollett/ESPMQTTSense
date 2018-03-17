@@ -4,17 +4,17 @@
 #include <Adafruit_BME280.h>
 
 
-#define WIFI_SSID "xxxxx"
-#define WIFI_PASS "xxx"
+#define WIFI_SSID "xxxxxxxxxxx"
+#define WIFI_PASS "xxxxxxxxxxxxx"
 #define MQTT_PORT 1883
 char  mqtt_server[] = "192.168.0.0";
-char  mqtt_username[] = "xxxxx";
-char  mqtt_password[] = "xxxxxxx";
+char  mqtt_username[] = "bmesensors";
+char  mqtt_password[] = "!bmesensors!";
 
 ADC_MODE(ADC_VCC);
 
 unsigned long previousPublishMillis = 0;        // store the last time we published data  
-const long publishInterval = 60000;             // interval (in MS) to update Adafruit IO data (1 min)
+const long publishInterval = 300000;            // interval (in MS) to update data (5 min)
 unsigned long currentMillis;                    // store LOT mcu has been running
 
 const String baseTopic = "basementsensor";
@@ -37,9 +37,12 @@ Adafruit_BME280 bme; // I2C
 void setup() {
   Serial.begin(115200);
   delay(150);
-
-  Wire.begin(2, 0);
+  Serial.println("Starting Wire");
+  
+  Wire.begin(2, 0); // GPIO0 and GPIO2 on the ESP
   Wire.setClock(100000);
+  Serial.println("Searching for sensors");
+  
   if (!bme.begin(0x76)) {
     Serial.println("Could not find a valid BME280 sensor, check wiring!");
     while (1);
@@ -86,9 +89,9 @@ void loop() {
 }
 
 void bmeRead() {
-  float t = bme.readTemperature();
+  float t = (bme.readTemperature()*9/5+32-13);  // converted to F from C
   float h = bme.readHumidity();
-  float p = bme.readPressure()/100.0F;
+  float p = bme.readPressure()/3389.39; // get pressure in inHg
 
   dtostrf(t, 5, 1, temperature);
   dtostrf(h, 5, 1, humidity);
