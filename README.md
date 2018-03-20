@@ -15,4 +15,4 @@ ESP8266 based environment sensor using the BME280 and MQTT communication
 
 
 
-[![Travis](https://img.shields.io/travis/jaycollett/ESPMQTTSense.svg?style=for-the-badge)](https://github.com/jaycollett/ESPMQTTSense) [![license](https://img.shields.io/github/license/jaycollett/ESPMQTTSense.svg?style=for-the-badge)](https://github.com/jaycollett/ESPMQTTSense)
+[![Travis](https://img.shields.io/travis/jaycollett/ESPMQTTSense.svg?style=for-the-badge)](https://travis-ci.org/jaycollett/ESPMQTTSense) [![license](https://img.shields.io/github/license/jaycollett/ESPMQTTSense.svg?style=for-the-badge)](https://github.com/jaycollett/ESPMQTTSense/blob/master/LICENSE)
