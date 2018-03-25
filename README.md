@@ -5,7 +5,7 @@ ESP8266 based environment sensor using the BME280 and MQTT communication
 **BOM**
 ----------
 1. [ESP8266 ESP-01](https://www.aliexpress.com/item/WiFi-module-ESP8266-Serial-to-WiFi-wireless-transparent-transmission-industrial-ESP-01S/32716268094.html)
-2. [Custom OSH Park PCBs x 3](https://oshpark.com/shared_projects/XdQKvwWd)
+2. [Custom OSH Park PCBs x 3](https://oshpark.com/shared_projects/DTD2a0g7)
 3. Passive Components - micro usb is part number: 10103594-0001LF
 4. [Enclosure x5](https://www.ebay.com/itm/H1-5pcs-Plastic-Electric-Project-Junction-Box-60x36x25mm/282124733873)
 5. [BME280 Sensor Module](https://www.banggood.com/CJMCU-280E-BME280-High-Precision-Atmospheric-Pressure-Sensor-For-Arduino-p-1103115.html)
