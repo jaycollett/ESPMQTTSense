@@ -1,6 +1,6 @@
 
 # ESPMQTTSense
-ESP8266 based environment sensor using the BME280 and MQTT communication 
+ESP8266 based environment sensor using the BME280 and MQTT communication. Designed to populate sensor data in my HASS.IO system. More details can be found in my blog post about this project [here](https://www.jaycollett.com/2018/03/cheap-environment-sensing-with-esp8266-mqtt).
 
 **BOM**
 ----------
