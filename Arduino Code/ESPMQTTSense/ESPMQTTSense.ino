@@ -10,6 +10,7 @@
 char  mqtt_server[] = "192.168.0.0";
 char  mqtt_username[] = "bmesensors";
 char  mqtt_password[] = "!bmesensors!";
+char  mqtt_clientid[] = "basementsensor";
 
 ADC_MODE(ADC_VCC);
 
@@ -123,7 +124,7 @@ void MQTT_connect() {
   while (!mqttclient.connected()) {
     Serial.print("Attempting MQTT connection...");
     // Attempt to connect
-    if (mqttclient.connect(mqtt_server, mqtt_username, mqtt_password)) {
+    if (mqttclient.connect(mqtt_clientid, mqtt_username, mqtt_password)) {
       Serial.println("connected");
     } else {
       Serial.print("failed, rc=");
