@@ -4,13 +4,15 @@
 #include <Adafruit_BME280.h>
 
 
-#define WIFI_SSID "xxxxxxxxxxx"
-#define WIFI_PASS "xxxxxxxxxxxxx"
-#define MQTT_PORT 1883
-char  mqtt_server[] = "192.168.0.0";
-char  mqtt_username[] = "bmesensors";
-char  mqtt_password[] = "!bmesensors!";
-char  mqtt_clientid[] = "basementsensor";
+#define WIFI_SSID "xxxxxxxxxxx"					// your WiFi SSID
+#define WIFI_PASS "xxxxxxxxxxxxx"				// your WiFi password 
+#define MQTT_PORT 1883							// default MQTT broker port
+
+char  fmversion[7] = "v1.9a";					// firmware version of this sensor
+char  mqtt_server[] = "192.168.0.0";			// MQTT broker IP address
+char  mqtt_username[] = "bmesensors";			// username for MQTT broker (USE ONE)
+char  mqtt_password[] = "!bmesensors!";			// password for MQTT broker
+char  mqtt_clientid[] = "basementsensor";		// client id for connections to MQTT broker
 
 ADC_MODE(ADC_VCC);
 
@@ -23,6 +25,7 @@ const String tempTopic = baseTopic + "/" + "temperature";
 const String humiTopic = baseTopic + "/" + "humidity";
 const String presTopic = baseTopic + "/" + "pressure";
 const String vccTopic  = baseTopic + "/" + "vcc";
+const String fwTopic   = baseTopic + "/" + "firmwarever";
 
 char temperature[6];
 char humidity[6];
@@ -33,14 +36,14 @@ IPAddress ip;
 
 WiFiClient WiFiClient;
 PubSubClient mqttclient(WiFiClient);
-Adafruit_BME280 bme; // I2C
+Adafruit_BME280 bme; // I2C init
 
 void setup() {
   Serial.begin(115200);
   delay(150);
   Serial.println("Starting Wire");
   
-  Wire.begin(2, 0); // GPIO0 and GPIO2 on the ESP
+  Wire.begin(2, 0); // GPIO2 and GPIO0 on the ESP
   Wire.setClock(100000);
   Serial.println("Searching for sensors");
   
@@ -70,8 +73,7 @@ void setup() {
 
 void loop() {
   
-  // yield for wifi 
-  yield();
+  yield(); // yield for wifi 
   
   // check to see if it's time to publish based on millis
   currentMillis = millis();
@@ -84,6 +86,7 @@ void loop() {
     mqttclient.publish(humiTopic.c_str(), humidity);
     mqttclient.publish(presTopic.c_str(), pressure);
     mqttclient.publish(vccTopic.c_str(), vcc);
+	mqttclient.publish(fwTopic.c_str(), fmversion);
     
     previousPublishMillis = currentMillis;
   }
@@ -94,14 +97,14 @@ void bmeRead() {
   float h = bme.readHumidity();
   float p = bme.readPressure()/3389.39; // get pressure in inHg
 
-  dtostrf(t, 5, 1, temperature);
-  dtostrf(h, 5, 1, humidity);
-  dtostrf(p, 5, 1, pressure);
+  dtostrf(t, 5, 2, temperature); // 5 chars total, 2 decimals (BME's are really accurate)
+  dtostrf(h, 5, 2, humidity);	 // 5 chars total, 2 decimals (BME's are really accurate)
+  dtostrf(p, 5, 2, pressure);	 // 5 chars total, 2 decimals (BME's are really accurate)
 }
 
 void vccRead() {
   float v  = ESP.getVcc() / 1000.0;
-  dtostrf(v, 5, 1, vcc);
+  dtostrf(v, 5, 2, vcc); // 5 chars total, 2 decimals
 }
 
 // #############################################################################
