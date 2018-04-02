@@ -4,15 +4,15 @@
 #include <Adafruit_BME280.h>
 
 
-#define WIFI_SSID "xxxxxxxxxxx"					// your WiFi SSID
-#define WIFI_PASS "xxxxxxxxxxxxx"				// your WiFi password 
-#define MQTT_PORT 1883							// default MQTT broker port
+#define WIFI_SSID "xxxxxxxxx"					// your WiFi SSID
+#define WIFI_PASS "xxxxxxxxxx"				// your WiFi password 
+#define MQTT_PORT 1883							  // default MQTT broker port
 
-char  fmversion[7] = "v1.9a";					// firmware version of this sensor
+char  fmversion[7] = "v1.9a";					    // firmware version of this sensor
 char  mqtt_server[] = "192.168.0.0";			// MQTT broker IP address
 char  mqtt_username[] = "bmesensors";			// username for MQTT broker (USE ONE)
-char  mqtt_password[] = "!bmesensors!";			// password for MQTT broker
-char  mqtt_clientid[] = "basementsensor";		// client id for connections to MQTT broker
+char  mqtt_password[] = "!bmesensors!";		// password for MQTT broker
+char  mqtt_clientid[] = "testsensor";		  // client id for connections to MQTT broker
 
 ADC_MODE(ADC_VCC);
 
@@ -20,7 +20,7 @@ unsigned long previousPublishMillis = 0;        // store the last time we publis
 const long publishInterval = 300000;            // interval (in MS) to update data (5 min)
 unsigned long currentMillis;                    // store LOT mcu has been running
 
-const String baseTopic = "basementsensor";
+const String baseTopic = "testsensor";
 const String tempTopic = baseTopic + "/" + "temperature";
 const String humiTopic = baseTopic + "/" + "humidity";
 const String presTopic = baseTopic + "/" + "pressure";
@@ -40,7 +40,7 @@ Adafruit_BME280 bme; // I2C init
 
 void setup() {
   Serial.begin(115200);
-  delay(150);
+  delay(1000);
   Serial.println("Starting Wire");
   
   Wire.begin(2, 0); // GPIO2 and GPIO0 on the ESP
@@ -67,6 +67,7 @@ void setup() {
   Serial.println("");
   Serial.println("WiFi connected");
   Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());   
   mqttclient.setServer(mqtt_server, MQTT_PORT);
 }
 
@@ -86,7 +87,7 @@ void loop() {
     mqttclient.publish(humiTopic.c_str(), humidity);
     mqttclient.publish(presTopic.c_str(), pressure);
     mqttclient.publish(vccTopic.c_str(), vcc);
-	mqttclient.publish(fwTopic.c_str(), fmversion);
+	  mqttclient.publish(fwTopic.c_str(), fmversion);
     
     previousPublishMillis = currentMillis;
   }
