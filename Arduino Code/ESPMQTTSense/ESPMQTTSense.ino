@@ -2,25 +2,23 @@
 #include <PubSubClient.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
+#include <WiFiManager.h>                  //https://github.com/tzapu/WiFiManager WiFi Configuration Magic
 
+#define MQTT_PORT 1883							      // default MQTT broker port
 
-#define WIFI_SSID "xxxxxxxxx"					// your WiFi SSID
-#define WIFI_PASS "xxxxxxxxxx"				// your WiFi password 
-#define MQTT_PORT 1883							  // default MQTT broker port
-
-char  fmversion[7] = "v1.9a";					    // firmware version of this sensor
-char  mqtt_server[] = "192.168.0.0";			// MQTT broker IP address
+char  fmversion[7] = "v2.1";					    // firmware version of this sensor
+char  mqtt_server[] = "192.168.0.5";			// MQTT broker IP address
 char  mqtt_username[] = "bmesensors";			// username for MQTT broker (USE ONE)
 char  mqtt_password[] = "!bmesensors!";		// password for MQTT broker
-char  mqtt_clientid[] = "testsensor";		  // client id for connections to MQTT broker
+char  mqtt_clientid[] = "remotesense5";	  // client id for connections to MQTT broker
 
 ADC_MODE(ADC_VCC);
 
-unsigned long previousPublishMillis = 0;        // store the last time we published data  
-const long publishInterval = 300000;            // interval (in MS) to update data (5 min)
-unsigned long currentMillis;                    // store LOT mcu has been running
+unsigned long previousPublishMillis = 0;  // store the last time we published data  
+const long publishInterval = 300000;      // interval (in MS) to update data (5 min)
+unsigned long currentMillis;              // store LOT mcu has been running
 
-const String baseTopic = "testsensor";
+const String baseTopic = "remotesense5";
 const String tempTopic = baseTopic + "/" + "temperature";
 const String humiTopic = baseTopic + "/" + "humidity";
 const String presTopic = baseTopic + "/" + "pressure";
@@ -32,17 +30,17 @@ char humidity[6];
 char pressure[7];
 char vcc[10];
 
-IPAddress ip;
-
-WiFiClient WiFiClient;
-PubSubClient mqttclient(WiFiClient);
+WiFiManager wifiManager;
+WiFiClient wifiClient;
+PubSubClient mqttclient(wifiClient);
 Adafruit_BME280 bme; // I2C init
 
 void setup() {
   Serial.begin(115200);
   delay(1000);
   Serial.println("Starting Wire");
-  
+  WiFi.mode(WIFI_STA);
+    
   Wire.begin(2, 0); // GPIO2 and GPIO0 on the ESP
   Wire.setClock(100000);
   Serial.println("Searching for sensors");
@@ -53,24 +51,18 @@ void setup() {
   }
 
   Serial.println();
-  Serial.print("Connecting to ");
-  Serial.println(WIFI_SSID);
+  Serial.print("Connecting to WiFi...");
 
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(WIFI_SSID, WIFI_PASS);
-
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
+  wifiManager.setTimeout(180);
+  if(!wifiManager.autoConnect()) {
+      Serial.println("Failed to connect");
+      delay(3000);
+      ESP.reset();
+      delay(5000);
   }
 
-  Serial.println("");
-  Serial.println("WiFi connected");
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP());   
   mqttclient.setServer(mqtt_server, MQTT_PORT);
 }
-
 
 void loop() {
   
