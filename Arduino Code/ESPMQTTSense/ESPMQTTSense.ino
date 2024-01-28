@@ -6,19 +6,20 @@
 
 #define MQTT_PORT 1883							      // default MQTT broker port
 
-char  fmversion[7] = "v2.1";					    // firmware version of this sensor
-char  mqtt_server[] = "192.168.0.5";			// MQTT broker IP address
-char  mqtt_username[] = "bmesensors";			// username for MQTT broker (USE ONE)
-char  mqtt_password[] = "!bmesensors!";		// password for MQTT broker
-char  mqtt_clientid[] = "remotesense5";	  // client id for connections to MQTT broker
+char  fmversion[7] = "v2.6";					    // firmware version of this sensor
+char  mqtt_server[] = "192.168.0.xxxx";		// MQTT broker IP address
+char  mqtt_username[] = "xxxxxxxxx";			// username for MQTT broker (USE ONE)
+char  mqtt_password[] = "xxxxxxxxxxx";		// password for MQTT broker
+char  mqtt_clientid[] = "remotesense4";	  // client id for connections to MQTT broker
 
 ADC_MODE(ADC_VCC);
 
 unsigned long previousPublishMillis = 0;  // store the last time we published data  
 const long publishInterval = 300000;      // interval (in MS) to update data (5 min)
 unsigned long currentMillis;              // store LOT mcu has been running
+unsigned int runCount = 0;
 
-const String baseTopic = "remotesense5";
+const String baseTopic = "remotesense4";
 const String tempTopic = baseTopic + "/" + "temperature";
 const String humiTopic = baseTopic + "/" + "humidity";
 const String presTopic = baseTopic + "/" + "pressure";
@@ -45,17 +46,20 @@ void setup() {
   Wire.setClock(100000);
   Serial.println("Searching for sensors");
   
-  if (!bme.begin(0x76)) {
-    Serial.println("Could not find a valid BME280 sensor, check wiring!");
-    while (1);
-  }
+   if (!bme.begin(0x76)) {
+     Serial.println("Could not find a valid BME280 sensor, check wiring!");
+     delay(3000);
+     ESP.reset();
+     delay(5000);
+   }
 
   Serial.println();
   Serial.print("Connecting to WiFi...");
 
-  wifiManager.setTimeout(180);
+  // configure the wifi manager to timeout and
+  wifiManager.setConfigPortalTimeout(180);
   if(!wifiManager.autoConnect()) {
-      Serial.println("Failed to connect");
+      Serial.println("Failed to connect, restarting ESP...");
       delay(3000);
       ESP.reset();
       delay(5000);
@@ -70,7 +74,8 @@ void loop() {
   
   // check to see if it's time to publish based on millis
   currentMillis = millis();
-  if (currentMillis - previousPublishMillis >= publishInterval) {
+  if ( (currentMillis - previousPublishMillis >= publishInterval) || (runCount == 0) ){
+    runCount = 1;
     bmeRead();
     vccRead();
     
